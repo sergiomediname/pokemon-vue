@@ -1,8 +1,8 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { useGetData } from "@/composables/getData";
-import LoadingSpinner from "../components/LoadingSpinner.vue";
-const { data, error, loading, getDataPokemon } = useGetData();
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+const { pokemons, loading, getSinglePokemon } = useGetData();
 
 const route = useRoute();
 const router = useRouter();
@@ -11,7 +11,7 @@ const back = () => {
     router.push("/");
 };
 
-getDataPokemon(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`, false);
+getSinglePokemon(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`);
 </script>
 
 <template>
@@ -19,14 +19,14 @@ getDataPokemon(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`, false);
     <div class="pokemon" v-else>
         <div
             class="card w-full lg:max-w-[75%] xl:max-w-[70%] mx-auto rounded-lg bg-white flex flex-wrap overflow-hidden"
-            :class="data.main_type"
+            :class="pokemons.main_type"
         >
             <div class="w-full sm:w-2/5">
                 <div
                     class="card__thumb relative overflow-hidden h-full aspect-video sm:aspect-[3/4] before:absolute before:w-[124%] before:h-full before:top-[-31%] before:left-2/4 before:-translate-x-2/4 sm:before:w-full sm:before:h-[124%] sm:before:left-[-35%] sm:before:top-2/4 sm:before:-translate-y-2/4 sm:before:-translate-x-0"
                 >
                     <img
-                        :src="data.thumb"
+                        :src="pokemons.thumb"
                         alt=""
                         class="absolute z-20 object-contain w-full h-full max-h-[60%] max-w-[60%] top-2/4 -translate-y-2/4 right-[15%]"
                     />
@@ -39,15 +39,15 @@ getDataPokemon(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`, false);
                     <div
                         class="text-xxs px-2 py-1 font-bold bg-neutral-200 rounded-lg mb-2"
                     >
-                        #{{ data.order }}
+                        #{{ pokemons.order }}
                     </div>
                     <h2 class="text-2xl font-extrabold capitalize text-center">
-                        {{ data.name }}
+                        {{ pokemons.name }}
                     </h2>
                 </div>
                 <div class="card__types my-5 flex items-center justify-center">
                     <span
-                        v-for="(type, index) in data.types"
+                        v-for="(type, index) in pokemons.types"
                         :key="type.slot"
                         class="rounded-xl px-2 py-1 font-bold capitalize text-xxs"
                         :class="[index > 0 ? 'ml-2' : '', type.type?.name]"
@@ -57,7 +57,7 @@ getDataPokemon(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`, false);
                 <div
                     class="card__stats grid grid-cols-[190px] justify-center md:grid-cols-2 md:justify-between"
                 >
-                    <div v-for="stat in data.stats" class="text-xs">
+                    <div v-for="stat in pokemons.stats" class="text-xs" :key="stat.stat.name">
                         <span class="text-neutral-400 capitalize"
                             >{{ stat.stat.name }}:
                         </span>

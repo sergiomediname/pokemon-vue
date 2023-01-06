@@ -48,6 +48,7 @@ defineProps(["pokemon"]);
                     v-for="stat in pokemon.stats.filter((stat) =>
                         ['attack', 'defense', 'speed'].includes(stat.stat.name)
                     )"
+                    :key="stat.stat.name"
                     class="text-center text-sm sm:text-xs"
                 >
                     <span class="block font-bold">{{ stat.base_stat }}</span>

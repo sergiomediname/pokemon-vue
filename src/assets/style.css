@@ -212,3 +212,7 @@ body {
     background-color: var(--type-bg-color);
     color: var(--type-text-color);
 }
+
+.router-link-active {
+    @apply opacity-50;
+}
